@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] =='}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -113,7 +113,38 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
+    def validate_args(self, args):
+        """
+        validate args
+        """
+        for arg in args:
+            if is_int(arg[1]) is False and is_float(arg[1]) is False and is_string(arg[1]) is False:
+                print("error {}".format(arg[1]))
+                return False
+
+
+
+
+    def parse_line(self, args):
+        """
+        parse args
+        """  
+        arguments = args.split()
+        tuples = []
+        for arg in arguments[1:]:
+            i = arg.find("=")
+            key = arg[:i]
+            value = arg[i+1:]
+            t = (key, value)
+            tuples.append(t)
+
+        print(tuples)
+        return(tuples)
+
     def do_create(self, args):
+        
+        tuples = self.parse_line(args)
+        self.validate_args(tuples)
         """ Create an object of any class"""
         if not args:
             print("** class name missing **")
@@ -272,7 +303,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +311,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -319,6 +350,35 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
+def is_int(value):
+    try:
+        index = value.find(".")
+        if index != -1:
+            return False
+        int(value)
+    except ValueError:
+        return False
+    return True
+
+def is_float(value):
+    try:
+        index = value.find(".")
+        if index == -1:
+            return False
+        value = float(value)
+    except ValueError:
+        return False
+    return True
+
+def is_string(value):
+    if value.startswith("\"") is True:
+        index = value.find("\\")
+        if value[index+1] != "\"":
+            return False
+        value.replace("_"," ")
+        return True
+    return False
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
