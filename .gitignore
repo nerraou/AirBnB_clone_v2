@@ -1,0 +1,5 @@
+# python
+*.pyc
+
+# json
+file.json
