@@ -73,7 +73,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] == '{' and pline[-1] =='}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -117,45 +117,52 @@ class HBNBCommand(cmd.Cmd):
         """
         validate args
         """
-        for arg in args:
-            if is_int(arg[1]) is False and is_float(arg[1]) is False and is_string(arg[1]) is False:
-                print("error {}".format(arg[1]))
-                return False
-
-
-
+        for arg in args[1:]:
+            if is_int(arg[1]) is True:
+                arg[1] = int(arg[1])
+            elif is_float(arg[1]) is True:
+                arg[1] = float(arg[1])
+            elif is_string(arg[1]) is True:
+                arg[1] = arg[1].replace("_", " ")
+                arg[1] = arg[1].replace("\\\"", "\"")
+                arg[1] = arg[1][1:-1]
+            else:
+                raise ValueError
 
     def parse_line(self, args):
         """
         parse args
-        """  
+        """
         arguments = args.split()
-        tuples = []
+        tables = [arguments[0]]
         for arg in arguments[1:]:
             i = arg.find("=")
             key = arg[:i]
             value = arg[i+1:]
-            t = (key, value)
-            tuples.append(t)
-
-        print(tuples)
-        return(tuples)
+            table = [key, value]
+            tables.append(table)
+        return(tables)
 
     def do_create(self, args):
-        
-        tuples = self.parse_line(args)
-        self.validate_args(tuples)
         """ Create an object of any class"""
-        if not args:
+        try:
+            arguments = self.parse_line(args)
+            self.validate_args(arguments)
+        except ValueError:
+            print("Not a valid argument")
+        if not arguments[0]:
             print("** class name missing **")
             return
-        elif args not in HBNBCommand.classes:
+        elif arguments[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
             return
-        new_instance = HBNBCommand.classes[args]()
+        kwargs = {}
+        for val in arguments[1:]:
+            kwargs[val[0]] = val[1]
+        new_instance = HBNBCommand.classes[arguments[0]]()
+        new_instance.update(**kwargs)
         storage.save()
         print(new_instance.id)
-        storage.save()
 
     def help_create(self):
         """ Help information for the create method """
@@ -351,7 +358,11 @@ class HBNBCommand(cmd.Cmd):
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
 
+
 def is_int(value):
+    """
+    check is int
+    """
     try:
         index = value.find(".")
         if index != -1:
@@ -361,7 +372,11 @@ def is_int(value):
         return False
     return True
 
+
 def is_float(value):
+    """
+    check is float
+    """
     try:
         index = value.find(".")
         if index == -1:
@@ -371,14 +386,18 @@ def is_float(value):
         return False
     return True
 
+
 def is_string(value):
+    """
+    check is String
+    """
     if value.startswith("\"") is True:
         index = value.find("\\")
         if value[index+1] != "\"":
             return False
-        value.replace("_"," ")
         return True
     return False
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
