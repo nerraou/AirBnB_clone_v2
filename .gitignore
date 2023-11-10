@@ -6,3 +6,6 @@ file.json
 
 # versions
 /versions
+
+# rsa
+/id_rsa
