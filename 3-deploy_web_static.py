@@ -10,12 +10,11 @@ from pathlib import Path
 
 
 env.hosts = ['100.24.237.103', '54.175.189.210']
-env.user = "ubuntu"
 
 
 def do_pack():
     """
-    create web_statci archive
+    create web_static archive
     """
     formated_date = datetime.now().strftime("%Y%m%d%H%M%S")
     archive_name = "versions/web_static_{}.tgz".format(formated_date)
