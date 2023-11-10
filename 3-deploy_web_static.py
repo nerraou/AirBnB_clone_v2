@@ -55,6 +55,6 @@ def deploy():
     deploy web_static
     """
     archive_path = do_pack()
-    if archive_path is None or not path.exists(archive_path):
-        return False
-    return do_deploy(archive_path)
+    if archive_path is not None and path.exists(archive_path):
+        return do_deploy(archive_path)
+    return False
