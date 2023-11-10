@@ -10,6 +10,7 @@ from pathlib import Path
 
 
 env.hosts = ['100.24.237.103', '54.175.189.210']
+env.user = "ubuntu"
 
 
 def do_pack():
