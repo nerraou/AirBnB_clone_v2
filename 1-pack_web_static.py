@@ -9,7 +9,7 @@ from os import path
 
 def do_pack():
     """
-    create web_statci archive
+    create web_static archive
     """
     formated_date = datetime.now().strftime("%Y%m%d%H%M%S")
     archive_name = "versions/web_static_{}.tgz".format(formated_date)
