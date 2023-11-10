@@ -2,7 +2,7 @@
 """
 fabric script to deploy packed web_static archive
 """
-from fabric.api import put, run
+from fabric.api import put, run, env
 from pathlib import Path
 
 env.hosts = ['100.24.237.103', '54.175.189.210']
