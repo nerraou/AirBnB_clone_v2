@@ -25,7 +25,13 @@ def hbnb():
 @app.errorhandler(404)
 def not_found(error):
     """ json 404 page """
-    return render_template('404.html')
+    return """
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server.  If
+ you entered the URL manually please check your spelling and try again.</p>
+"""
 
 
 @app.route('/c/<text>')
