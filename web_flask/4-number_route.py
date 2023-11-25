@@ -22,12 +22,6 @@ def hbnb():
     return "HBNB"
 
 
-@app.errorhandler(404)
-def not_found(error):
-    """ json 404 page """
-    return render_template("404.html")
-
-
 @app.route('/c/<text>')
 def C(text):
     """C is fun"""
