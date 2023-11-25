@@ -53,7 +53,7 @@ def convert_or_404(value, type):
 def number(n):
     """print number"""
     value = convert_or_404(n, int)
-    return f"{value}"
+    return f"{value} is a number"
 
 
 if __name__ == "__main__":
