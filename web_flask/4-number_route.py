@@ -25,13 +25,7 @@ def hbnb():
 @app.errorhandler(404)
 def not_found(error):
     """ json 404 page """
-    return """
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
-<title>404 Not Found</title>
-<h1>Not Found</h1>
-<p>The requested URL was not found on the server.  If
- you entered the URL manually please check your spelling and try again.</p>
-"""
+    return render_template("404.html")
 
 
 @app.route('/c/<text>')
@@ -47,19 +41,10 @@ def python(text):
     return f"Python {text.replace('_', ' ')}"
 
 
-def convert_or_404(value, type):
-    """Convert a value to the given type, or raise a 404 error"""
-    try:
-        return type(value)
-    except ValueError:
-        abort(404)
-
-
-@app.route('/number/<n>')
+@app.route('/number/<int:n>')
 def number(n):
     """print number"""
-    value = convert_or_404(n, int)
-    return f"{value} is a number"
+    return f"{n} is a number"
 
 
 if __name__ == "__main__":
