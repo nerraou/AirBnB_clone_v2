@@ -9,15 +9,14 @@ from sqlalchemy import Column, String
 class State(BaseModel, Base):
     """ State class """
     __tablename__ = "states"
-    state_id = Column(String(60), nullable=False)
+    name = Column(String(128), nullable=False)
+    cities = orm.relationship(
+        'City',
+        cascade='all, delete, delete-orphan',
+        backref='state'
+    )
 
-    if os.getenv("HBNB_TYPE_STORAGE") == "db":
-        cities = orm.relationship(
-            'City',
-            cascade='all, delete, delete-orphan',
-            backref='state'
-        )
-    else:
+    if os.getenv("HBNB_TYPE_STORAGE") != "db":
         @property
         def cities(self):
             """
