@@ -5,6 +5,8 @@ ARBNB CLONE
 
 
 from flask import Flask, render_template
+from models import storage
+from models.state import State
 
 app = Flask(__name__)
 app.url_map.strict_slashes = False
@@ -54,6 +56,15 @@ def number_template_oddity(n):
     if n % 2 == 0:
         odd = "even"
     return render_template("6-number_odd_or_even.html", number=n, oddity=odd)
+
+
+@app.route("/states_list")
+def states_list():
+    """list all states"""
+    states = storage.all(State)
+    storage.close()
+
+    return render_template("7-states_list.html", states=states)
 
 
 if __name__ == "__main__":
