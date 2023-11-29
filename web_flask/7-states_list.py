@@ -62,9 +62,14 @@ def number_template_oddity(n):
 def states_list():
     """list all states"""
     states = storage.all(State)
-    storage.close()
 
     return render_template("7-states_list.html", states=states)
+
+
+@app.teardown_appcontext
+def teardown_db(exception):
+    """close sessions"""
+    storage.close()
 
 
 if __name__ == "__main__":
