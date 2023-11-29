@@ -10,7 +10,7 @@ Base = orm.declarative_base()
 class BaseModel:
     """A base class for all hbnb models"""
 
-    id = Column(String(60), primary_key=True, default=uuid.uuid4)
+    id = Column(String(60), primary_key=True)
     created_at = Column(DateTime, nullable=False, default=datetime.utcnow())
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow())
 
@@ -20,6 +20,9 @@ class BaseModel:
         get all values from kwargs
         """
         if len(kwargs) != 0:
+            if "id" not in kwargs:
+                self.id = str(uuid.uuid4())
+
             for key in kwargs:
                 if key == "__class__":
                     continue
@@ -28,7 +31,6 @@ class BaseModel:
                 else:
                     setattr(self, key, kwargs[key])
         else:
-            from models import storage
             self.id = str(uuid.uuid4())
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
